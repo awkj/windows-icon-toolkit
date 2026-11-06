@@ -4,7 +4,7 @@
 
 选择 C#、.NET 10 LTS、WinUI 3、Windows App SDK 稳定通道、CommunityToolkit.Mvvm。核对时 Microsoft.WindowsAppSDK 最新稳定 NuGet 为 2.6.5，CommunityToolkit.Mvvm 为 8.4.2。依赖固定版本，升级前重新验证。
 
-WinUI 3 是微软推荐的新 Windows 桌面应用原生 UI 方案。使用原生 NavigationView、卡片、InfoBar、ContentDialog、Mica 和系统主题。WPF 更适合已有 WPF 代码资产；本项目没有该负担。当前功能仅针对 Windows，跨平台框架和 WebView 容器不会带来直接收益。
+WinUI 3 是微软推荐的新 Windows 桌面应用原生 UI 方案。使用紧凑单页、真实图标前后对比、CheckBox、ContentDialog、Mica 和系统主题。WPF 更适合已有 WPF 代码资产；本项目没有该负担。当前功能仅针对 Windows，跨平台框架和 WebView 容器不会带来直接收益。
 
 ## 权限边界
 

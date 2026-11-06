@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace WindowsIconToolkit.Services;
 
-public enum OverlayAction { HideArrows, HideBoth, Restore }
+public enum OverlayAction { Apply, Restore }
 
 public sealed class OverlayService
 {
@@ -11,6 +11,15 @@ public sealed class OverlayService
     private static readonly string IconPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
         "DesktopIconOverlayBackup", "transparent.ico");
+
+    public bool IsHiddenConfigured(string name)
+    {
+        using var registry = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+        using var key = registry.OpenSubKey(RegistryPath);
+        var value = key?.GetValue(name)?.ToString();
+        return File.Exists(IconPath) && (string.Equals(value, IconPath, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(value, IconPath + ",0", StringComparison.OrdinalIgnoreCase));
+    }
 
     public string ReadStatus(string name)
     {
@@ -26,14 +35,15 @@ public sealed class OverlayService
         return "当前：已有其他自定义设置（应用前会备份）";
     }
 
-    public async Task ApplyAsync(OverlayAction action)
+    public async Task ApplyAsync(OverlayAction action, bool hideArrow = false, bool hideShield = false)
     {
         var script = Path.Combine(AppContext.BaseDirectory, "Backend", "Desktop-IconOverlays.ps1");
         if (!File.Exists(script)) throw new FileNotFoundException("缺少角标操作脚本，请重新构建项目。", script);
         // All arguments are selected here; no command text or registry path comes from the UI.
         var arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"{script}\" -Action " +
-                        (action == OverlayAction.Restore ? "Restore" : "Hide");
-        if (action == OverlayAction.HideBoth) arguments += " -IncludeShield";
+                        (action == OverlayAction.Restore ? "Restore" : "Apply");
+        if (action == OverlayAction.Apply && hideArrow) arguments += " -HideArrow";
+        if (action == OverlayAction.Apply && hideShield) arguments += " -IncludeShield";
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),

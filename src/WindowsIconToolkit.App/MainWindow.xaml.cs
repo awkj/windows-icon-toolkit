@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Runtime.InteropServices;
 using WindowsIconToolkit.ViewModels;
 
 namespace WindowsIconToolkit;
@@ -11,8 +12,12 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        AppWindow.Resize(new Windows.Graphics.SizeInt32(1120, 880));
+        var scale = GetDpiForWindow(WinRT.Interop.WindowNative.GetWindowHandle(this)) / 96d;
+        AppWindow.Resize(new Windows.Graphics.SizeInt32((int)(640 * scale), (int)(600 * scale)));
     }
+
+    [DllImport("user32.dll")]
+    private static extern uint GetDpiForWindow(nint window);
 
     private async void RestartExplorer_Click(object sender, RoutedEventArgs e)
     {

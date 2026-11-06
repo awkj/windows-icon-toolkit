@@ -1,8 +1,9 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Hide', 'Restore', 'Status')]
+    [ValidateSet('Hide', 'Apply', 'Restore', 'Status')]
     [string]$Action = 'Status',
     [switch]$IncludeShield,
+    [switch]$HideArrow,
     [switch]$Pause
 )
 
@@ -69,6 +70,7 @@ try {
     if ($Action -ne 'Status' -and -not $isAdmin) {
         $arguments = '-NoProfile -ExecutionPolicy Bypass -File "{0}" -Action {1}' -f $PSCommandPath, $Action
         if ($IncludeShield) { $arguments += ' -IncludeShield' }
+        if ($HideArrow) { $arguments += ' -HideArrow' }
         if ($Pause) { $arguments += ' -Pause' }
         $process = Start-Process -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgumentList $arguments -Verb RunAs -Wait -PassThru
         exit $process.ExitCode
@@ -95,35 +97,36 @@ try {
                 Write-Host "$label [$name]: $value"
             }
             Write-Host "Backup directory: $folder"
-        } elseif ($Action -eq 'Hide') {
-            New-Item -ItemType Directory -Path $folder -Force | Out-Null
-            New-TransparentIcon $iconPath
-            $key = $base.CreateSubKey($subKey)
-            $names = @('29')
-            if ($IncludeShield) { $names += '77' }
+        } else {
+            $hasHiddenTargets = $Action -eq 'Hide' -or ($Action -eq 'Apply' -and ($HideArrow -or $IncludeShield))
+            if ($hasHiddenTargets) {
+                New-Item -ItemType Directory -Path $folder -Force | Out-Null
+                New-TransparentIcon $iconPath
+                $key = $base.CreateSubKey($subKey)
+            } else {
+                $key = $base.OpenSubKey($subKey, $true)
+            }
+            $names = @('29', '77')
+            if ($Action -eq 'Hide' -and -not $IncludeShield) { $names = @('29') }
             foreach ($name in $names) {
                 $backupPath = Join-Path $folder "$name.clixml"
-                if (-not (Test-Path -LiteralPath $backupPath)) {
-                    $exists = $key.GetValueNames() -contains $name
-                    $original = [pscustomobject]@{
-                        Name = $name
-                        Exists = $exists
-                        Kind = if ($exists) { $key.GetValueKind($name).ToString() } else { 'String' }
-                        Value = if ($exists) { $key.GetValue($name, $null, [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames) } else { $null }
+                $shouldHide = $Action -eq 'Hide' -or ($Action -eq 'Apply' -and (($name -eq '29' -and $HideArrow) -or ($name -eq '77' -and $IncludeShield)))
+                if ($shouldHide) {
+                    if (-not (Test-Path -LiteralPath $backupPath)) {
+                        $exists = $key.GetValueNames() -contains $name
+                        $original = [pscustomobject]@{
+                            Name = $name
+                            Exists = $exists
+                            Kind = if ($exists) { $key.GetValueKind($name).ToString() } else { 'String' }
+                            Value = if ($exists) { $key.GetValue($name, $null, [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames) } else { $null }
+                        }
+                        $original | Export-Clixml -LiteralPath $backupPath
                     }
-                    $original | Export-Clixml -LiteralPath $backupPath
+                    $key.SetValue($name, $replacement, [Microsoft.Win32.RegistryValueKind]::ExpandString)
+                    Write-Host "Hidden overlay: $name"
+                    continue
                 }
-                $key.SetValue($name, $replacement, [Microsoft.Win32.RegistryValueKind]::ExpandString)
-                Write-Host "Hidden overlay: $name"
-            }
-            Write-Host 'Applied. Sign out and sign in again to refresh the icons.'
-            Write-Host 'Keep the transparent.ico file. UAC and administrator permissions are unchanged.'
-            if ($IncludeShield) { Write-Host 'Shield hiding depends on the Windows version and application.' }
-        } else {
-            # Restore only values backed up by this script; preserve unrelated settings.
-            $key = $base.OpenSubKey($subKey, $true)
-            foreach ($name in @('29', '77')) {
-                $backupPath = Join-Path $folder "$name.clixml"
+                # Apply restores unchecked targets only if this tool has a backup.
                 if (-not (Test-Path -LiteralPath $backupPath)) { continue }
                 $original = Import-Clixml -LiteralPath $backupPath
                 if ($original.Name -ne $name) { throw "Invalid backup: $backupPath" }
@@ -141,7 +144,8 @@ try {
                 Remove-Item -LiteralPath $backupPath
                 Write-Host "Restored overlay: $name"
             }
-            Write-Host 'Restore finished. Sign out and sign in again to refresh the icons.'
+            Write-Host 'Finished. Restart Explorer or sign out and sign in to refresh icons.'
+            Write-Host 'Keep transparent.ico. UAC and administrator permissions are unchanged.'
         }
     } finally {
         if ($key) { $key.Dispose() }

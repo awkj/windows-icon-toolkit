@@ -2,7 +2,9 @@
 
 Windows 图标工具箱。使用 WinUI 3 原生界面，调整桌面快捷方式箭头与管理员盾牌角标，并支持恢复修改前的设置。
 
-首版提供：隐藏快捷方式箭头、尝试隐藏箭头与盾牌、恢复原设置、读取当前配置、确认后重启当前会话的资源管理器。界面支持系统浅色/深色主题与 Mica 背景。
+当前提供：箭头与盾牌分别勾选、真实系统图标的修改前后预览、应用选项、恢复原设置、刷新状态、确认后重启当前会话的资源管理器。界面为紧凑单页，支持系统浅色/深色主题、Mica 背景和 Per-Monitor V2 DPI。
+
+预览在运行时读取本机记事本图标和 Windows 原生角标，不随仓库分发 Windows 图像资源。勾选只改变预览，点击“应用到系统”才会修改设置。
 
 ## 技术选型
 
@@ -43,7 +45,7 @@ dotnet publish .\src\WindowsIconToolkit.App\WindowsIconToolkit.App.csproj -c Rel
 
 脚本使用 `29` 和可选的 `77`，不修改 UAC、不修改可执行文件、不删除 `IsShortcut`。隐藏盾牌不会消除管理员授权弹窗。
 
-单独选择“隐藏箭头”不会撤销之前已配置的盾牌隐藏；撤销请使用“恢复原设置”。当前首版恢复会处理本工具备份的两项设置。
+GUI 应用选项时：勾选的角标配置为隐藏；取消勾选的角标恢复本工具备份的原设置，没有本工具备份的值保持不变。“恢复原设置”处理本工具备份的两项设置。独立命令行菜单保留旧 Hide 行为，单独隐藏箭头不会撤销之前配置的盾牌隐藏。
 
 ## 结构
 
@@ -62,4 +64,4 @@ docs/                          技术决策、Dism++ 实现核对
 - [Dism++ 对比记录](docs/dism-comparison.md)
 - [架构与后续工作](docs/architecture.md)
 
-项目暂为本地 Git 仓库，未发布到 GitHub。项目名是否与现有产品或商标冲突尚未核查。
+GitHub：[awkj/windows-icon-toolkit](https://github.com/awkj/windows-icon-toolkit)。应用图标正在选型，候选见 [design/icon-candidates](design/icon-candidates)。项目名是否与现有产品或商标冲突尚未核查。
