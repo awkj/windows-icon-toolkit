@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 $repo = Split-Path $PSScriptRoot -Parent
 $assetFolder = Join-Path $repo 'src\WindowsIconToolkit.App\Assets'
-$pngPath = Join-Path $assetFolder 'AppIcon.png'
+$pngPath = Join-Path $repo 'design\app-icon.png'
 $icoPath = Join-Path $assetFolder 'AppIcon.ico'
 $source = [Drawing.Bitmap]::new($pngPath)
 $images = @()
@@ -34,7 +34,7 @@ try {
             $graphics.InterpolationMode = [Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
             $graphics.PixelOffsetMode = [Drawing.Drawing2D.PixelOffsetMode]::HighQuality
             $graphics.Clear([Drawing.Color]::Transparent)
-            $scale = ($size * 0.90) / [Math]::Max($sourceRectangle.Width, $sourceRectangle.Height)
+            $scale = ($size * 0.96) / [Math]::Max($sourceRectangle.Width, $sourceRectangle.Height)
             $width = $sourceRectangle.Width * $scale
             $height = $sourceRectangle.Height * $scale
             $destination = [Drawing.RectangleF]::new(($size - $width) / 2, ($size - $height) / 2, $width, $height)

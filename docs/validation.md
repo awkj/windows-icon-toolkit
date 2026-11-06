@@ -35,3 +35,13 @@
 - 新版记事本资源来自当前账户注册的 Microsoft.WindowsNotepad 11.2607.14.0 的 unplated 256 图标。未复制该第三方资源到仓库。
 
 图标大小比较基于源图与 ICO 的像素有效面积，未声称已直接观察第三方 Dock 的缓存刷新结果。
+
+## 0.2.3 单文件与目录清理
+
+- 实际执行 just build 和 just dev；Release、Debug 均只生成一个约 90.4 MiB 的 EXE。
+- artifacts 与 bin 的目录枚举均确认仅有 WindowsIconToolkit.App.exe，未保留 DLL、语言目录或单独图标/脚本。
+- 检查 .build/bundle-files-Release.txt：347 个内置文件中，语言目录仅 en-us 和 zh-CN；MainWindow.xbf、App.xbf、Controls/IconPreview.xbf、Assets/AppIcon.ico、Backend/Desktop-IconOverlays.ps1 均已内置。
+- 在只有 EXE 的 artifacts 目录独立启动成功；重新安装 0.2.3 后正常显示窗口。安装目录仅有一个 EXE、卸载脚本及安装标记。
+- 安装版本注册为 0.2.3；卸载 -WhatIf 检查通过，未实际卸载。
+- 旧源码 bin/obj 与旧 artifacts/publish 已移入回收站；design 当前只有正式 PNG、提示词和说明。旧候选通过 Git 删除，Git 历史保留。
+- 单文件模式会在运行时解压所需文件到框架缓存；没有宣称运行时零解压。

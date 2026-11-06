@@ -6,17 +6,24 @@
     <RootNamespace>WindowsIconToolkit</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
-    <Version>0.2.1</Version>
+    <Version>0.2.3</Version>
     <Product>Windows Icon Toolkit</Product>
     <Description>Preview and adjust Windows desktop icon overlays.</Description>
     <Platforms>x64;ARM64</Platforms>
     <Platform Condition="'$(Platform)' == ''">x64</Platform>
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     <UseWinUI>true</UseWinUI>
-    <EnableMsixTooling>false</EnableMsixTooling>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <AppxPackage>false</AppxPackage>
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>embedded</DebugType>
+    <SatelliteResourceLanguages>en;en-US;zh-CN;zh-Hans</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -43,5 +50,16 @@
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
     </ItemGroup>
+  </Target>
+  <Target Name="FilterToolkitResourceLanguages" BeforeTargets="_ComputeFilesToBundle">
+    <ItemGroup>
+      <ToolkitUnusedLocale Include="@(ResolvedFileToPublish)"
+          Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(ResolvedFileToPublish.RelativePath)', '^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*[\\/]')) and !$([System.Text.RegularExpressions.Regex]::IsMatch('%(ResolvedFileToPublish.RelativePath)', '^(?i:en|en-US|zh-CN|zh-Hans)[\\/]'))" />
+      <ResolvedFileToPublish Remove="@(ToolkitUnusedLocale)" />
+    </ItemGroup>
+  </Target>
+  <Target Name="AuditToolkitBundle" AfterTargets="PrepareForBundle">
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\..\..\.build\bundle-files-$(Configuration).txt"
+                      Lines="@(FilesToBundle->'%(RelativePath)')" Overwrite="true" />
   </Target>
 </Project>

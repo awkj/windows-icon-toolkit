@@ -3,15 +3,10 @@ param([switch]$Launch)
 $ErrorActionPreference = 'Stop'
 $productId = 'awkj/windows-icon-toolkit'
 $repo = Split-Path $PSScriptRoot -Parent
-$source = Join-Path $repo 'artifacts\publish'
+$source = Join-Path $repo 'artifacts'
 $sourceExe = Join-Path $source 'WindowsIconToolkit.App.exe'
 if (-not (Test-Path -LiteralPath $sourceExe)) { throw 'Run just build before installing.' }
-foreach ($required in @('WindowsIconToolkit.App.pri','MainWindow.xbf','App.xbf',
-    'Controls\IconPreview.xbf','Assets\AppIcon.ico','Backend\Desktop-IconOverlays.ps1')) {
-    if (-not (Test-Path -LiteralPath (Join-Path $source $required))) {
-        throw "Incomplete published app: $required is missing. Run just build again."
-    }
-}
+if (@(Get-ChildItem -LiteralPath $source -Force).Count -ne 1) { throw 'Expected one self-contained EXE. Run just build again.' }
 $version = [Diagnostics.FileVersionInfo]::GetVersionInfo($sourceExe).ProductVersion.Split('+')[0]
 $parent = [IO.Path]::GetFullPath((Join-Path $env:LOCALAPPDATA 'Programs'))
 $target = Join-Path $parent 'WindowsIconToolkit'
@@ -43,7 +38,7 @@ New-Item -ItemType Directory -Path $stage | Out-Null
 $movedOld = $false
 $installedNew = $false
 try {
-    Get-ChildItem -LiteralPath $source -Force | Copy-Item -Destination $stage -Recurse -Force
+    Copy-Item -LiteralPath $sourceExe -Destination $stage
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'uninstall.ps1') -Destination (Join-Path $stage 'uninstall.ps1')
     $installedExe = Join-Path $target 'WindowsIconToolkit.App.exe'
     foreach ($process in @(Get-Process 'WindowsIconToolkit.App' -ErrorAction SilentlyContinue)) {

@@ -16,7 +16,9 @@ UI 与系统服务通过 OverlayService 分离，MainViewModel 管理异步操�
 
 ## 分发
 
-首版使用非 MSIX 自包含目录，优先 x64。保留 WinUI 和 .NET 所需输出文件及 Backend 脚本。发布阶段再考虑签名、安装器和自动更新；当前没有静默安装、自动联网更新或开机常驻。
+使用非 MSIX、自包含 x64 单文件 EXE。IncludeAllContentForSelfExtract 将 .NET、WinUI、本地资源和操作脚本全部内置，运行时由框架解压到系统缓存。SatelliteResourceLanguages 限定托管卫星资源，并在打包前移除其余 WinUI 本地语言文件；实际清单仅保留 en-US 与 zh-CN。EnableMsixTooling 为单文件 SDK 校验启用，但 WindowsPackageType=None、AppxPackage=false，不生成 MSIX。
+
+Debug 与 Release 都通过单文件 publish，最终只向 bin 或 artifacts 复制一个 EXE。编译输出和中间文件统一在 .build，安装时只复制该 EXE，另外保留卸载脚本与安装标记。正式 PNG 只有 design/app-icon.png 一份，ICO 为构建使用的派生资源。后续再考虑代码签名与自动更新；当前不联网自动更新、不常驻启动。
 
 ## 下一步
 

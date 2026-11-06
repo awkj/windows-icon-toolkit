@@ -15,7 +15,7 @@ Windows 图标工具箱。使用 WinUI 3 原生界面，调整桌面快捷方式
 | 语言与运行时 | C# / .NET 10 LTS | 适合持续维护的小型系统工具 |
 | 视图状态 | CommunityToolkit.Mvvm 8.4.2 | 分离界面、状态和系统操作 |
 | 系统操作 | 独立提升权限的 Windows PowerShell 5.1 进程 | 复用已验证的恢复脚本；界面本身以普通权限运行 |
-| 首版分发 | 非 MSIX、自包含 x64 目录 | 简化系统设置工具的启动与部署；ARM64 需单独构建验证 |
+| 分发 | 非 MSIX、自包含 x64 单文件 EXE | 内置 .NET、WinUI 运行库、图标和操作脚本 |
 
 本项目主要针对 Windows 11。项目最低 API 基线为 Windows 10 2004，不代表已经在所有满足基线的系统上测试。
 
@@ -24,8 +24,8 @@ Windows 图标工具箱。使用 WinUI 3 原生界面，调整桌面快捷方式
 需要 .NET 10 SDK 和 just；首次构建需要联网还原 NuGet 包。构建脚本也会识别项目 `.tools/dotnet` 内的便携 SDK。仓库中的 mise.toml 固定 just 版本；使用 mise 时先信任仓库配置并安装工具。
 
 ```powershell
-just dev     # Debug 构建并启动开发版
-just build   # Release 构建，发布到 artifacts/publish
+just dev     # 生成 bin/WindowsIconToolkit.App.exe 并启动
+just build   # 生成 artifacts/WindowsIconToolkit.App.exe
 just install # 构建并安装到当前账户，随后启动
 ```
 
@@ -37,11 +37,13 @@ just install # 构建并安装到当前账户，随后启动
 .\scripts\install.ps1 -Launch
 ```
 
-应用需要保留完整输出目录，不能只复制 EXE。源代码中的操作脚本会随构建输出，运行时不下载第三方程序。
+`bin` 和 `artifacts` 各只有一个 EXE，可以单独复制运行。依赖、PRI/XBF 界面资源、图标和操作脚本内置；运行时自动解压到系统缓存，应用不下载运行库。内置依赖的语言资源只保留英语（en-US）与简体中文（zh-CN）。构建清单写入 `.build/bundle-files-Debug.txt` 和 `.build/bundle-files-Release.txt`，可核查实际打包内容。
+
+编译中间文件统一放到 `.build`，不再在源代码目录产生 bin/obj。`.build`、`bin`、`artifacts` 均不提交 Git。
 
 安装位置是 `%LOCALAPPDATA%\Programs\WindowsIconToolkit`，无需管理员权限。安装器创建开始菜单入口，并注册 Windows“已安装的应用”中的版本与卸载入口。升级时先停止该安装目录下的应用，再替换文件；不会停止其他位置运行的开发版。卸载程序不会自动撤销桌面角标设置，如需撤销，先在应用内恢复。
 
-正式图标采用已选定的 Windows 蓝色田字格（三个方块和一个圆形）。原始设计稿保留在 Assets/AppIcon.png；多尺寸 ICO 使用 `scripts/Export-AppIcon.ps1` 导出，收紧外围透明留白，使主体覆盖约 90% 的图标画布，内部间距保持原设计。
+正式图标采用已选定的 Windows 蓝色田字格（三个方块和一个圆形）。唯一 PNG 源文件是 `design/app-icon.png`；多尺寸 ICO 使用 `scripts/Export-AppIcon.ps1` 导出，收紧外围透明留白，使主体覆盖约 96% 的图标画布，内部间距保持原设计。旧候选已从当前源码移除。
 
 非 MSIX 发布显式包含应用 PRI 与编译后的 XBF 文件，避免 Windows App SDK 的 [unpackaged publish 资源遗漏问题](https://github.com/microsoft/WindowsAppSDK/issues/6720)。启动异常写入 `%LOCALAPPDATA%\WindowsIconToolkit\Logs\errors.log`。
 
@@ -61,9 +63,12 @@ GUI 应用选项时：勾选的角标配置为隐藏；取消勾选的角标恢�
 
 ```text
 src/WindowsIconToolkit.App/     WinUI 界面、MVVM 状态、系统操作入口
-  Backend/                     随应用分发的操作脚本（构建时从 scripts 同步）
 scripts/                       命令行入口、构建与只读验证
 docs/                          技术决策、Dism++ 实现核对
+design/                        当前正式图标与生成说明
+bin/                           一个开发版 EXE（忽略）
+artifacts/                     一个发布版 EXE（忽略）
+.build/                        编译缓存与打包清单（忽略）
 ```
 
 ## 资料
@@ -74,4 +79,4 @@ docs/                          技术决策、Dism++ 实现核对
 - [Dism++ 对比记录](docs/dism-comparison.md)
 - [架构与后续工作](docs/architecture.md)
 
-GitHub：[awkj/windows-icon-toolkit](https://github.com/awkj/windows-icon-toolkit)。应用图标正在选型，候选见 [design/icon-candidates](design/icon-candidates)。项目名是否与现有产品或商标冲突尚未核查。
+GitHub：[awkj/windows-icon-toolkit](https://github.com/awkj/windows-icon-toolkit)。正式图标见 [design](design)。项目名是否与现有产品或商标冲突尚未核查。

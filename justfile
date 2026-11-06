@@ -3,11 +3,11 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-NoProfile", "-ExecutionPoli
 default:
     @just --list
 
-# Build and launch the development app.
+# Build bin/WindowsIconToolkit.App.exe and launch it.
 dev:
     & './scripts/build.ps1' -Configuration Debug -Run
 
-# Compile and publish the self-contained x64 app.
+# Publish one self-contained EXE to artifacts.
 build:
     & './scripts/build.ps1' -Configuration Release -Publish
 

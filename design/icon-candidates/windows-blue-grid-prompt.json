@@ -1,5 +1,0 @@
-{
-  "tool": "built-in image_gen",
-  "reference": "J-violet-corner.png, followed by the violet grid revision",
-  "prompt": "Edit the provided icon. Keep the exact 2-by-2 grid arrangement with three equal square panes in the top-left, top-right, bottom-left and a circular ball in the bottom-right. Change the palette to WINDOWS BLUE ONLY: the three squares use solid #0078D4, and the ball uses the same blue with only a subtle light-blue highlight for a gently spherical feeling. Remove all purple, violet, coral, red and orange. Preserve the simple clean frontal geometry and restrained corner rounding. Refine the cross-shaped gaps to be uniformly clean and fully transparent; remove every stray colored speck, colored halo and disconnected artifact between and outside the shapes. Exactly four main elements, no other objects. No enclosing background tile, no outline border, no text, no letters, no glow, no cast shadow, no texture. Genuine transparent canvas outside and between the four shapes, crisp antialiased edges, centered square composition with generous transparent padding. A simple Windows utility app icon, not a complex illustration."
-}

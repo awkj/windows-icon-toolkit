@@ -1,4 +1,6 @@
 .tools/
+.build/
+bin/
 **/bin/
 **/obj/
 .vs/
