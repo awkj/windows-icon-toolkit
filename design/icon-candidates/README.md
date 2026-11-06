@@ -4,6 +4,12 @@
 
 ## 当前候选：简洁彩色
 
+用户后续选择第三款的方向，要求改成田字格，右下角为圆球，并统一使用 Windows 蓝色。最新版本：
+
+![Windows 蓝色田字格与圆球](K-windows-blue-grid.png)
+
+提示词：windows-blue-grid-prompt.json。此图为最新设计稿，尚未接入程序图标。
+
 | 候选 | 含义 | 图像 |
 | --- | --- | --- |
 | H 蓝色图标＋橙色角标 | 轮廓清楚，突出角标 | ![H](H-blue-badge.png) |
