@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Heading.Text" xml:space="preserve"><value>Desktop icon overlays</value></data>
+  <data name="Introduction.Text" xml:space="preserve"><value>Preview changes before applying them.</value></data>
+  <data name="BeforeLabel.Text" xml:space="preserve"><value>Before</value></data>
+  <data name="AfterLabel.Text" xml:space="preserve"><value>After</value></data>
+  <data name="BeforeAppName.Text" xml:space="preserve"><value>Notepad</value></data>
+  <data name="AfterAppName.Text" xml:space="preserve"><value>Notepad</value></data>
+  <data name="BeforePreview.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Before: Notepad with a shortcut arrow and administrator shield</value></data>
+  <data name="HideArrowOption.Content" xml:space="preserve"><value>Hide shortcut arrow</value></data>
+  <data name="HideShieldOption.Content" xml:space="preserve"><value>Hide administrator shield</value></data>
+  <data name="ApplyButton.Content" xml:space="preserve"><value>Apply to Windows</value></data>
+  <data name="RestoreButton.Content" xml:space="preserve"><value>Restore previous settings</value></data>
+  <data name="RestartExplorerButton.Content" xml:space="preserve"><value>Restart File Explorer</value></data>
+  <data name="RefreshButton.Content" xml:space="preserve"><value>Refresh status</value></data>
+  <data name="VersionButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Version information</value></data>
+  <data name="AppName" xml:space="preserve"><value>Windows Icon Toolkit</value></data>
+  <data name="VersionFormat" xml:space="preserve"><value>Version {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="ProjectHome" xml:space="preserve"><value>Project on GitHub</value></data>
+  <data name="Close" xml:space="preserve"><value>Close</value></data>
+  <data name="RestartConfirmationTitle" xml:space="preserve"><value>Restart File Explorer?</value></data>
+  <data name="RestartConfirmationMessage" xml:space="preserve"><value>Your desktop and taskbar will briefly disappear. Open folder windows may close. Other apps will keep running.</value></data>
+  <data name="Restart" xml:space="preserve"><value>Restart</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="PreviewDescription" xml:space="preserve"><value>After: Notepad, shortcut arrow {0}, administrator shield {1}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="Hidden" xml:space="preserve"><value>hidden</value></data>
+  <data name="Visible" xml:space="preserve"><value>visible</value></data>
+  <data name="ArrowStatusFormat" xml:space="preserve"><value>Arrow · {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="ShieldStatusFormat" xml:space="preserve"><value>Shield · {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="Refreshed" xml:space="preserve"><value>Status refreshed.</value></data>
+  <data name="ReadFailedFormat" xml:space="preserve"><value>Could not read settings: {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="WaitingForAdmin" xml:space="preserve"><value>Waiting for administrator approval…</value></data>
+  <data name="Restored" xml:space="preserve"><value>Previous settings restored.</value></data>
+  <data name="Applied" xml:space="preserve"><value>Settings updated.</value></data>
+  <data name="AdminCancelled" xml:space="preserve"><value>Administrator approval was cancelled. No changes were made.</value></data>
+  <data name="ExplorerRestarted" xml:space="preserve"><value>File Explorer restarted.</value></data>
+  <data name="RestartFailedFormat" xml:space="preserve"><value>Could not restart File Explorer: {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="OverlayDefault" xml:space="preserve"><value>Current: Windows default</value></data>
+  <data name="OverlayConfigured" xml:space="preserve"><value>Current: transparent overlay configured; desktop appearance is unverified</value></data>
+  <data name="OverlayIconMissing" xml:space="preserve"><value>Current: transparent icon file is missing; apply the setting again</value></data>
+  <data name="OverlayCustom" xml:space="preserve"><value>Current: other custom settings (backed up before applying)</value></data>
+  <data name="BackendMissing" xml:space="preserve"><value>The overlay script is missing. Rebuild the app.</value></data>
+  <data name="BackendStartFailed" xml:space="preserve"><value>Could not start the operation.</value></data>
+  <data name="BackendFailedFormat" xml:space="preserve"><value>The operation failed (exit code {0}). Run the command-line script from the repository for details.</value><comment>Preserve the numbered format placeholders.</comment></data>
+</root>

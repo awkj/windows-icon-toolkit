@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using WindowsIconToolkit.ViewModels;
+using WindowsIconToolkit.Localization;
 
 namespace WindowsIconToolkit;
 
@@ -15,6 +16,7 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Title = Strings.Get("AppName");
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico"));
         var scale = GetDpiForWindow(WinRT.Interop.WindowNative.GetWindowHandle(this)) / 96d;
         AppWindow.Resize(new Windows.Graphics.SizeInt32((int)(640 * scale), (int)(600 * scale)));
@@ -26,19 +28,19 @@ public sealed partial class MainWindow : Window
     private async void Version_Click(object sender, RoutedEventArgs e)
     {
         var panel = new StackPanel { Spacing = 12 };
-        panel.Children.Add(new TextBlock { Text = "版本 " + VersionLabel.TrimStart('v'), FontSize = 18 });
+        panel.Children.Add(new TextBlock { Text = Strings.Format("VersionFormat", VersionLabel.TrimStart('v')), FontSize = 18 });
         panel.Children.Add(new HyperlinkButton
         {
-            Content = "GitHub 项目主页",
+            Content = Strings.Get("ProjectHome"),
             NavigateUri = new Uri("https://github.com/awkj/windows-icon-toolkit"),
             Padding = new Thickness(0)
         });
         await new ContentDialog
         {
             XamlRoot = Content.XamlRoot,
-            Title = "Windows Icon Toolkit",
+            Title = Strings.Get("AppName"),
             Content = panel,
-            CloseButtonText = "关闭"
+            CloseButtonText = Strings.Get("Close")
         }.ShowAsync();
     }
 
@@ -47,10 +49,10 @@ public sealed partial class MainWindow : Window
         var dialog = new ContentDialog
         {
             XamlRoot = Content.XamlRoot,
-            Title = "重启资源管理器？",
-            Content = "桌面和任务栏会短暂消失，打开的文件夹窗口可能关闭。其他应用将继续运行。",
-            PrimaryButtonText = "重启",
-            CloseButtonText = "取消",
+            Title = Strings.Get("RestartConfirmationTitle"),
+            Content = Strings.Get("RestartConfirmationMessage"),
+            PrimaryButtonText = Strings.Get("Restart"),
+            CloseButtonText = Strings.Get("Cancel"),
             DefaultButton = ContentDialogButton.Close
         };
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)

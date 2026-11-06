@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using WindowsIconToolkit.Services;
+using WindowsIconToolkit.Localization;
 
 namespace WindowsIconToolkit.ViewModels;
 
@@ -18,7 +19,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] public partial bool HideShield { get; set; }
     public Visibility PreviewArrowVisibility => HideArrow ? Visibility.Collapsed : Visibility.Visible;
     public Visibility PreviewShieldVisibility => HideShield ? Visibility.Collapsed : Visibility.Visible;
-    public string PreviewDescription => $"修改后：记事本，箭头{(HideArrow ? "隐藏" : "显示")}，盾牌{(HideShield ? "隐藏" : "显示")}";
+    public string PreviewDescription => Strings.Format("PreviewDescription", Strings.Get(HideArrow ? "Hidden" : "Visible"), Strings.Get(HideShield ? "Hidden" : "Visible"));
     public bool CanInteract => !IsBusy;
     public Visibility StatusVisibility => string.IsNullOrEmpty(StatusMessage) && !IsBusy ? Visibility.Collapsed : Visibility.Visible;
 
@@ -52,13 +53,13 @@ public partial class MainViewModel : ObservableObject
     {
         try
         {
-            ArrowStatus = "箭头 · " + service.ReadStatus("29");
-            ShieldStatus = "盾牌 · " + service.ReadStatus("77");
+            ArrowStatus = Strings.Format("ArrowStatusFormat", service.ReadStatus("29"));
+            ShieldStatus = Strings.Format("ShieldStatusFormat", service.ReadStatus("77"));
             HideArrow = service.IsHiddenConfigured("29");
             HideShield = service.IsHiddenConfigured("77");
-            StatusMessage = "已刷新。";
+            StatusMessage = Strings.Get("Refreshed");
         }
-        catch (Exception ex) { StatusMessage = "读取失败：" + ex.Message; }
+        catch (Exception ex) { StatusMessage = Strings.Format("ReadFailedFormat", ex.Message); }
     }
 
     [RelayCommand] private Task ApplySelectionAsync() => ApplyAsync(OverlayAction.Apply);
@@ -68,7 +69,7 @@ public partial class MainViewModel : ObservableObject
     {
         if (IsBusy) return;
         IsBusy = true;
-        StatusMessage = "等待管理员授权并写入设置…";
+        StatusMessage = Strings.Get("WaitingForAdmin");
         try
         {
             await service.ApplyAsync(action, HideArrow, HideShield);
@@ -76,11 +77,11 @@ public partial class MainViewModel : ObservableObject
             HideShield = service.IsHiddenConfigured("77");
             Refresh();
             StatusMessage = action == OverlayAction.Restore
-                ? "已恢复原设置。"
-                : "设置已更新。";
+                ? Strings.Get("Restored")
+                : Strings.Get("Applied");
         }
         catch (Win32Exception ex) when (ex.NativeErrorCode == 1223)
-        { StatusMessage = "已取消管理员授权，未执行本次修改。"; }
+        { StatusMessage = Strings.Get("AdminCancelled"); }
         catch (Exception ex) { StatusMessage = ex.Message; }
         finally { IsBusy = false; }
     }
@@ -93,9 +94,9 @@ public partial class MainViewModel : ObservableObject
         {
             await service.RestartExplorerAsync();
             Refresh();
-            StatusMessage = "资源管理器已重启。";
+            StatusMessage = Strings.Get("ExplorerRestarted");
         }
-        catch (Exception ex) { StatusMessage = "重启失败：" + ex.Message; }
+        catch (Exception ex) { StatusMessage = Strings.Format("RestartFailedFormat", ex.Message); }
         finally { IsBusy = false; }
     }
 }

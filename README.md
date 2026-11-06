@@ -4,6 +4,8 @@ Windows 图标工具箱。使用 WinUI 3 原生界面，调整桌面快捷方式
 
 当前提供：箭头与盾牌分别勾选、真实系统图标的修改前后预览、应用选项、恢复原设置、刷新状态、确认后重启当前会话的资源管理器。界面为紧凑单页，支持系统浅色/深色主题、Mica 背景和 Per-Monitor V2 DPI。
 
+界面支持简体中文和英语，采用 WinUI 3 的 `.resw`、`x:Uid` 与 MRT Core 资源加载机制。启动时跟随 Windows 显示语言，不支持的语言回退到英语；界面、弹窗、状态提示和无障碍名称均已本地化。实现与验证见 [本地化说明](docs/localization.md)。
+
 预览优先读取本机 Windows 11 新版记事本安装包的图标和 Windows 原生角标，不随仓库分发 Windows 图像资源。勾选只改变预览，点击“应用到系统”才会修改设置。右下角显示应用版本号，点击可查看版本信息与项目主页。
 
 ## 技术选型
@@ -65,6 +67,7 @@ GUI 应用选项时：勾选的角标配置为隐藏；取消勾选的角标恢�
 src/WindowsIconToolkit.App/     WinUI 界面、MVVM 状态、系统操作入口
 scripts/                       命令行入口、构建与只读验证
 docs/                          技术决策、Dism++ 实现核对
+src/WindowsIconToolkit.App/Strings/  简体中文、英语 Resources.resw
 design/                        当前正式图标与生成说明
 bin/                           一个开发版 EXE（忽略）
 artifacts/                     一个发布版 EXE（忽略）

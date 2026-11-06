@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Heading.Text" xml:space="preserve"><value>桌面图标角标</value></data>
+  <data name="Introduction.Text" xml:space="preserve"><value>先看效果，再应用到系统。</value></data>
+  <data name="BeforeLabel.Text" xml:space="preserve"><value>修改前</value></data>
+  <data name="AfterLabel.Text" xml:space="preserve"><value>修改后</value></data>
+  <data name="BeforeAppName.Text" xml:space="preserve"><value>记事本</value></data>
+  <data name="AfterAppName.Text" xml:space="preserve"><value>记事本</value></data>
+  <data name="BeforePreview.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>修改前：记事本，显示快捷方式箭头和管理员盾牌</value></data>
+  <data name="HideArrowOption.Content" xml:space="preserve"><value>隐藏快捷方式箭头</value></data>
+  <data name="HideShieldOption.Content" xml:space="preserve"><value>隐藏管理员盾牌</value></data>
+  <data name="ApplyButton.Content" xml:space="preserve"><value>应用到系统</value></data>
+  <data name="RestoreButton.Content" xml:space="preserve"><value>恢复原设置</value></data>
+  <data name="RestartExplorerButton.Content" xml:space="preserve"><value>重启资源管理器</value></data>
+  <data name="RefreshButton.Content" xml:space="preserve"><value>刷新状态</value></data>
+  <data name="VersionButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>版本信息</value></data>
+  <data name="AppName" xml:space="preserve"><value>Windows Icon Toolkit</value></data>
+  <data name="VersionFormat" xml:space="preserve"><value>版本 {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="ProjectHome" xml:space="preserve"><value>GitHub 项目主页</value></data>
+  <data name="Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="RestartConfirmationTitle" xml:space="preserve"><value>重启资源管理器？</value></data>
+  <data name="RestartConfirmationMessage" xml:space="preserve"><value>桌面和任务栏会短暂消失，打开的文件夹窗口可能关闭。其他应用将继续运行。</value></data>
+  <data name="Restart" xml:space="preserve"><value>重启</value></data>
+  <data name="Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="PreviewDescription" xml:space="preserve"><value>修改后：记事本，箭头{0}，盾牌{1}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="Hidden" xml:space="preserve"><value>隐藏</value></data>
+  <data name="Visible" xml:space="preserve"><value>显示</value></data>
+  <data name="ArrowStatusFormat" xml:space="preserve"><value>箭头 · {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="ShieldStatusFormat" xml:space="preserve"><value>盾牌 · {0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="Refreshed" xml:space="preserve"><value>已刷新。</value></data>
+  <data name="ReadFailedFormat" xml:space="preserve"><value>读取失败：{0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="WaitingForAdmin" xml:space="preserve"><value>等待管理员授权并写入设置…</value></data>
+  <data name="Restored" xml:space="preserve"><value>已恢复原设置。</value></data>
+  <data name="Applied" xml:space="preserve"><value>设置已更新。</value></data>
+  <data name="AdminCancelled" xml:space="preserve"><value>已取消管理员授权，未执行本次修改。</value></data>
+  <data name="ExplorerRestarted" xml:space="preserve"><value>资源管理器已重启。</value></data>
+  <data name="RestartFailedFormat" xml:space="preserve"><value>重启失败：{0}</value><comment>Preserve the numbered format placeholders.</comment></data>
+  <data name="OverlayDefault" xml:space="preserve"><value>当前：Windows 默认设置</value></data>
+  <data name="OverlayConfigured" xml:space="preserve"><value>当前：已配置透明角标，桌面效果待确认</value></data>
+  <data name="OverlayIconMissing" xml:space="preserve"><value>当前：配置的透明图标文件缺失，请重新应用</value></data>
+  <data name="OverlayCustom" xml:space="preserve"><value>当前：已有其他自定义设置（应用前会备份）</value></data>
+  <data name="BackendMissing" xml:space="preserve"><value>缺少角标操作脚本，请重新构建项目。</value></data>
+  <data name="BackendStartFailed" xml:space="preserve"><value>无法启动操作进程。</value></data>
+  <data name="BackendFailedFormat" xml:space="preserve"><value>操作失败（退出码 {0}）。可运行仓库中的命令行脚本查看详细错误。</value><comment>Preserve the numbered format placeholders.</comment></data>
+</root>

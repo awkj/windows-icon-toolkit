@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml;
+using WindowsIconToolkit.Localization;
 
 namespace WindowsIconToolkit;
 
@@ -9,7 +10,7 @@ public partial class App : Application
     public App()
     {
         UnhandledException += (_, args) => WriteFailure(args.Exception, args.Message);
-        try { InitializeComponent(); }
+        try { Strings.Initialize(); InitializeComponent(); }
         catch (Exception ex) { WriteFailure(ex, "Application initialization"); throw; }
     }
 

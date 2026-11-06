@@ -6,7 +6,8 @@
     <RootNamespace>WindowsIconToolkit</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
-    <Version>0.2.3</Version>
+    <Version>0.2.4</Version>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <Product>Windows Icon Toolkit</Product>
     <Description>Preview and adjust Windows desktop icon overlays.</Description>
     <Platforms>x64;ARM64</Platforms>

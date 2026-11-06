@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.Win32;
+using WindowsIconToolkit.Localization;
 
 namespace WindowsIconToolkit.Services;
 
@@ -26,19 +27,19 @@ public sealed class OverlayService
         using var registry = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
         using var key = registry.OpenSubKey(RegistryPath);
         var value = key?.GetValue(name)?.ToString();
-        if (value is null) return "当前：Windows 默认设置";
+        if (value is null) return Strings.Get("OverlayDefault");
         if (string.Equals(value, IconPath, StringComparison.OrdinalIgnoreCase) ||
             string.Equals(value, IconPath + ",0", StringComparison.OrdinalIgnoreCase))
             return File.Exists(IconPath)
-                ? "当前：已配置透明角标，桌面效果待确认"
-                : "当前：配置的透明图标文件缺失，请重新应用";
-        return "当前：已有其他自定义设置（应用前会备份）";
+                ? Strings.Get("OverlayConfigured")
+                : Strings.Get("OverlayIconMissing");
+        return Strings.Get("OverlayCustom");
     }
 
     public async Task ApplyAsync(OverlayAction action, bool hideArrow = false, bool hideShield = false)
     {
         var script = Path.Combine(AppContext.BaseDirectory, "Backend", "Desktop-IconOverlays.ps1");
-        if (!File.Exists(script)) throw new FileNotFoundException("缺少角标操作脚本，请重新构建项目。", script);
+        if (!File.Exists(script)) throw new FileNotFoundException(Strings.Get("BackendMissing"), script);
         // All arguments are selected here; no command text or registry path comes from the UI.
         var arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"{script}\" -Action " +
                         (action == OverlayAction.Restore ? "Restore" : "Apply");
@@ -52,10 +53,10 @@ public sealed class OverlayService
             UseShellExecute = true,
             Verb = "runas",
             WindowStyle = ProcessWindowStyle.Hidden
-        }) ?? throw new InvalidOperationException("无法启动操作进程。");
+        }) ?? throw new InvalidOperationException(Strings.Get("BackendStartFailed"));
         await process.WaitForExitAsync();
         if (process.ExitCode != 0)
-            throw new InvalidOperationException($"操作失败（退出码 {process.ExitCode}）。可运行仓库中的命令行脚本查看详细错误。");
+            throw new InvalidOperationException(Strings.Format("BackendFailedFormat", process.ExitCode));
     }
 
     public async Task RestartExplorerAsync()

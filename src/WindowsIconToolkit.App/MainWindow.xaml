@@ -8,8 +8,8 @@
     <ScrollViewer>
         <StackPanel Margin="24,20,24,20" Spacing="18" UseLayoutRounding="True">
             <StackPanel Spacing="6">
-                <TextBlock Text="桌面图标角标" FontSize="24" FontWeight="SemiBold" />
-                <TextBlock Text="先看效果，再应用到系统。" FontSize="14"
+                <TextBlock x:Uid="Heading" FontSize="24" FontWeight="SemiBold" />
+                <TextBlock x:Uid="Introduction" FontSize="14"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -19,32 +19,32 @@
                         <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="修改前" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" />
-                        <controls:IconPreview AutomationProperties.Name="修改前：记事本，显示快捷方式箭头和管理员盾牌" />
-                        <TextBlock Text="记事本" HorizontalAlignment="Center" FontSize="14" />
+                        <TextBlock x:Uid="BeforeLabel" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" />
+                        <controls:IconPreview x:Uid="BeforePreview" />
+                        <TextBlock x:Uid="BeforeAppName" HorizontalAlignment="Center" FontSize="14" />
                     </StackPanel>
                     <FontIcon Grid.Column="1" Glyph="&#xE72A;" FontSize="18" VerticalAlignment="Center"
                               Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                     <StackPanel Grid.Column="2" Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="修改后" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" />
+                        <TextBlock x:Uid="AfterLabel" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" />
                         <controls:IconPreview ArrowVisibility="{x:Bind ViewModel.PreviewArrowVisibility, Mode=OneWay}"
                                               ShieldVisibility="{x:Bind ViewModel.PreviewShieldVisibility, Mode=OneWay}"
                                               AutomationProperties.Name="{x:Bind ViewModel.PreviewDescription, Mode=OneWay}" />
-                        <TextBlock Text="记事本" HorizontalAlignment="Center" FontSize="14" />
+                        <TextBlock x:Uid="AfterAppName" HorizontalAlignment="Center" FontSize="14" />
                     </StackPanel>
                 </Grid>
             </Border>
             <StackPanel Spacing="6">
-                <CheckBox Content="隐藏快捷方式箭头" IsChecked="{x:Bind ViewModel.HideArrow, Mode=TwoWay}"
+                <CheckBox x:Uid="HideArrowOption" IsChecked="{x:Bind ViewModel.HideArrow, Mode=TwoWay}"
                           IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" FontSize="15" />
-                <CheckBox Content="隐藏管理员盾牌" IsChecked="{x:Bind ViewModel.HideShield, Mode=TwoWay}"
+                <CheckBox x:Uid="HideShieldOption" IsChecked="{x:Bind ViewModel.HideShield, Mode=TwoWay}"
                           IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" FontSize="15" />
             </StackPanel>
             <StackPanel Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="10">
-                    <Button Content="应用到系统" Style="{StaticResource AccentButtonStyle}"
+                    <Button x:Uid="ApplyButton" Style="{StaticResource AccentButtonStyle}"
                             Command="{x:Bind ViewModel.ApplySelectionCommand}" IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" />
-                    <Button Content="恢复原设置" Command="{x:Bind ViewModel.RestoreCommand}"
+                    <Button x:Uid="RestoreButton" Command="{x:Bind ViewModel.RestoreCommand}"
                             IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" />
                 </StackPanel>
                 <Grid ColumnSpacing="10" Visibility="{x:Bind ViewModel.StatusVisibility, Mode=OneWay}">
@@ -57,11 +57,11 @@
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                        <Button Content="重启资源管理器" Click="RestartExplorer_Click" IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" />
-                        <Button Content="刷新状态" Command="{x:Bind ViewModel.RefreshCommand}" IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" />
+                        <Button x:Uid="RestartExplorerButton" Click="RestartExplorer_Click" IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" />
+                        <Button x:Uid="RefreshButton" Command="{x:Bind ViewModel.RefreshCommand}" IsEnabled="{x:Bind ViewModel.CanInteract, Mode=OneWay}" />
                     </StackPanel>
-                    <HyperlinkButton Grid.Column="1" Content="{x:Bind VersionLabel}" Click="Version_Click"
-                                     ToolTipService.ToolTip="版本信息" VerticalAlignment="Center" />
+                    <HyperlinkButton x:Uid="VersionButton" Grid.Column="1" Content="{x:Bind VersionLabel}" Click="Version_Click"
+                                     VerticalAlignment="Center" />
                 </Grid>
             </Border>
         </StackPanel>

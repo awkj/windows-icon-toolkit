@@ -45,3 +45,13 @@
 - 安装版本注册为 0.2.3；卸载 -WhatIf 检查通过，未实际卸载。
 - 旧源码 bin/obj 与旧 artifacts/publish 已移入回收站；design 当前只有正式 PNG、提示词和说明。旧候选通过 Git 删除，Git 历史保留。
 - 单文件模式会在运行时解压所需文件到框架缓存；没有宣称运行时零解压。
+
+## 0.2.4 MRT Core 本地化
+
+- 两份 Resources.resw 各 42 个键，完整性脚本在 Windows PowerShell 5.1 下通过：键集合一致、无空译文、格式占位符一致、XAML/代码引用有效、代码/XAML 无硬编码中文。
+- 实际编译的应用 PRI 通过 MakePRI dump 检查，包含 Heading 的中英两组候选值。
+- 在已安装的单文件版以 --language en-US 启动：XAML 主界面与无障碍名称显示英文；点击刷新得到 Status refreshed.，版本弹窗显示 Version 0.2.4 / Project on GitHub / Close；英文布局无截断。
+- 以 --language de-DE 启动，实际显示英语回退资源。
+- 当前 SDK 不接受空 PrimaryLanguageOverride。修正为普通启动读取 Windows UI 语言后，当前 zh-CN 环境下正常显示中文，版本为 v0.2.4。
+- 测试未更改 Windows 显示语言，没有执行角标写入或资源管理器重启。
+- 最终 just dev 启动通过；bin/artifacts 各保持一个 EXE，源 .resw 未作为松散文件输出。安装版哈希与 Release 产物一致，打包依赖语言仍仅 en-us、zh-CN。
