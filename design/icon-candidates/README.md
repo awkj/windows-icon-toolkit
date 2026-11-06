@@ -8,7 +8,13 @@
 
 ![Windows 蓝色田字格与圆球](K-windows-blue-grid.png)
 
-提示词：windows-blue-grid-prompt.json。此图为最新设计稿，尚未接入程序图标。
+上图提示词：windows-blue-grid-prompt.json。
+
+最新调整：按用户要求缩小形状、加大间距，并要求纯 Windows 蓝色。设计稿：
+
+![蓝色加宽间距版](L-windows-blue-spaced.png)
+
+提示词：windows-blue-spaced-prompt.json。尚未接入程序图标。
 
 | 候选 | 含义 | 图像 |
 | --- | --- | --- |
