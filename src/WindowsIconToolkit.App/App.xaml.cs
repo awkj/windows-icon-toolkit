@@ -6,11 +6,33 @@ public partial class App : Application
 {
     private MainWindow? window;
 
-    public App() => InitializeComponent();
+    public App()
+    {
+        UnhandledException += (_, args) => WriteFailure(args.Exception, args.Message);
+        try { InitializeComponent(); }
+        catch (Exception ex) { WriteFailure(ex, "Application initialization"); throw; }
+    }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        window = new MainWindow();
-        window.Activate();
+        try
+        {
+            window = new MainWindow();
+            window.Activate();
+        }
+        catch (Exception ex) { WriteFailure(ex, "Window creation"); throw; }
+    }
+
+    private static void WriteFailure(Exception exception, string context)
+    {
+        try
+        {
+            var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "WindowsIconToolkit", "Logs");
+            Directory.CreateDirectory(folder);
+            File.AppendAllText(Path.Combine(folder, "errors.log"),
+                $"{DateTimeOffset.Now:o} {context}{Environment.NewLine}{exception}{Environment.NewLine}");
+        }
+        catch { /* Logging must not replace the original error. */ }
     }
 }

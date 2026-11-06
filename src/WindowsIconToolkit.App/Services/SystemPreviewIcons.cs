@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
+using Windows.Management.Deployment;
 
 namespace WindowsIconToolkit.Services;
 
@@ -17,11 +18,55 @@ public static class SystemPreviewIcons
     private static async Task<PreviewIconImages> LoadAsync()
     {
         var system = Environment.GetFolderPath(Environment.SpecialFolder.System);
-        var application = await ExtractAsync(Path.Combine(system, "notepad.exe"), 0, 256, false);
+        var application = await LoadNotepadAsync(system);
         // Read default resources directly so Shell Icons overrides do not hide the preview.
         var arrow = await ExtractAsync(Path.Combine(system, "shell32.dll"), 29, 64, true);
         var shield = await ExtractAsync(Path.Combine(system, "imageres.dll"), -78, 64, true);
         return new(application, arrow, shield);
+    }
+
+    private static async Task<BitmapImage> LoadNotepadAsync(string systemDirectory)
+    {
+        try
+        {
+            var manager = new PackageManager();
+            var package = manager.FindPackagesForUser(string.Empty, "Microsoft.WindowsNotepad_8wekyb3d8bbwe")
+                .Where(p => !p.IsResourcePackage && !p.IsFramework)
+                .OrderByDescending(p => new Version(p.Id.Version.Major, p.Id.Version.Minor,
+                    p.Id.Version.Build, p.Id.Version.Revision))
+                .FirstOrDefault();
+            if (package is not null)
+            {
+                // GetLogo can return a tile image with extensive padding. Prefer
+                // the unplated taskbar-size resource from the installed package.
+                var assetDirectory = Path.Combine(package.InstalledLocation.Path, "Assets");
+                foreach (var name in new[]
+                {
+                    "NotepadAppList.targetsize-256_altform-unplated.png",
+                    "NotepadAppList.targetsize-256.png"
+                })
+                {
+                    var path = Path.Combine(assetDirectory, name);
+                    if (!File.Exists(path)) continue;
+                    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(path);
+                    using var stream = await file.OpenReadAsync();
+                    var image = new BitmapImage();
+                    await image.SetSourceAsync(stream);
+                    return image;
+                }
+                var entry = (await package.GetAppListEntriesAsync()).FirstOrDefault();
+                if (entry is not null)
+                {
+                    using var stream = await entry.DisplayInfo.GetLogo(new Windows.Foundation.Size(256, 256)).OpenReadAsync();
+                    var image = new BitmapImage();
+                    await image.SetSourceAsync(stream);
+                    return image;
+                }
+            }
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine("Modern Notepad icon unavailable: " + ex); }
+        // Windows installations without the Store Notepad app still get a usable preview.
+        return await ExtractAsync(Path.Combine(systemDirectory, "notepad.exe"), 0, 256, false);
     }
 
     private static async Task<BitmapImage> ExtractAsync(string path, int index, int size, bool trim)

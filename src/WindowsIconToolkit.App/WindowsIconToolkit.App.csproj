@@ -5,6 +5,10 @@
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>WindowsIconToolkit</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+    <Version>0.2.1</Version>
+    <Product>Windows Icon Toolkit</Product>
+    <Description>Preview and adjust Windows desktop icon overlays.</Description>
     <Platforms>x64;ARM64</Platforms>
     <Platform Condition="'$(Platform)' == ''">x64</Platform>
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
@@ -22,5 +26,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\scripts\Desktop-IconOverlays.ps1" Link="Backend\Desktop-IconOverlays.ps1" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+  <!-- Unpackaged publish omits project PRI/XBF files in the SDK; see WindowsAppSDK#6720. -->
+  <Target Name="PublishToolkitXamlResources" BeforeTargets="ComputeResolvedFilesToPublishList"
+          DependsOnTargets="$(GenerateProjectPriFile)" Condition="'$(WindowsPackageType)' == 'None'">
+    <Error Condition="!Exists('$(ProjectPriFullPath)')" Text="The application PRI was not generated; refusing to publish an incomplete app." />
+    <ItemGroup>
+      <ResolvedFileToPublish Include="$(ProjectPriFullPath)" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>$(ProjectPriFileName)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+      <ToolkitCompiledXaml Include="$(TargetDir)**\*.xbf" />
+      <ResolvedFileToPublish Include="@(ToolkitCompiledXaml)" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(ToolkitCompiledXaml.RecursiveDir)%(Filename)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
 </Project>

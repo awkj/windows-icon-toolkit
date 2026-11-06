@@ -14,7 +14,7 @@
 
 ![蓝色加宽间距版](L-windows-blue-spaced.png)
 
-提示词：windows-blue-spaced-prompt.json。尚未接入程序图标。
+提示词：windows-blue-spaced-prompt.json。用户已选定该版本，已接入程序与窗口图标。原图在 src/WindowsIconToolkit.App/Assets/AppIcon.png；ICO 导出时仅收紧外围留白，内部间距和四个形状保持原设计。
 
 | 候选 | 含义 | 图像 |
 | --- | --- | --- |
